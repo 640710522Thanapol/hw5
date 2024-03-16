@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'cartoon_model.dart';
 
 void main() {
   runApp(MyApp());
-}
-
-class Cartoon {
-  final String title;
-  final String image;
-
-  Cartoon({required this.title, required this.image});
-
-  factory Cartoon.fromJson(Map<String, dynamic> json) {
-    return Cartoon(
-      title: json['title'] ?? '',
-      image: json['image'] ?? '',
-    );
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -84,13 +71,28 @@ class _CartoonListPageState extends State<CartoonListPage> {
                 return ListTile(
                   title: Text(cartoon.title),
                   onTap: () {
-                    if (cartoon.image.isNotEmpty) { // Check if image is not empty
+                    if (cartoon.image.isNotEmpty) {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            content: Image.network(
-                              cartoon.image,
+                            title: Center(child: Text(cartoon.title)),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 200, // Specify the height of the image
+                                  width: double.infinity,
+                                  child: Image.network(
+                                    cartoon.image,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Center(child: Text('Year: ${cartoon.year}')),
+                                Center(child: Text('Genre: '+cartoon.genre.toString())),
+                              ],
                             ),
                           );
                         },
